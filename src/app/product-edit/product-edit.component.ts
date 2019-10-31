@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../products.service';
+import Product from '../Product';
 
 @Component({
   selector: 'app-product-edit',
@@ -12,7 +13,7 @@ export class ProductEditComponent implements OnInit {
 
   angForm: FormGroup;
   product: any = {};
-
+  products: Product[];
   constructor(private route: ActivatedRoute, private router: Router, private ps: ProductsService, private fb: FormBuilder) {
     this.createForm();
   }
@@ -40,5 +41,10 @@ export class ProductEditComponent implements OnInit {
       this.ps.updateProduct(ProductName, ProductDescription, ProductPrice, params.id);
       this.router.navigate(['products']);
     });
+    this.ps
+      .getProducts()
+      .subscribe((data: Product[]) => {
+        this.products = data;
+      });
   }
 }
